@@ -6,6 +6,9 @@ import { HerramientasComponent } from './pages/herramientas/herramientas.compone
 import { SobreMiComponent } from './pages/sobre-mi/sobre-mi.component';
 import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { ContenidoComponent } from './pages/contenido/contenido.component';
+import { adminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -15,5 +18,7 @@ export const routes: Routes = [
   { path: 'sobre-mi', component: SobreMiComponent },
   { path: 'login', component: LoginComponent },
   { path: 'dashboard', component: DashboardComponent },
+  { path: 'admin', component: AdminComponent, canActivate: [adminGuard] },
+  { path: 'contenido/:id', component: ContenidoComponent },
   { path: '**', redirectTo: '' }
 ];

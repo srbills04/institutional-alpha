@@ -11,6 +11,9 @@ THINKERS
 <a routerLink="/formacion" routerLinkActive="active-link" class="nav-link">Formación</a>
 <a routerLink="/herramientas" routerLinkActive="active-link" class="nav-link">Herramientas</a>
 <a routerLink="/sobre-mi" routerLinkActive="active-link" class="nav-link">Sobre mí</a>
+@if (isAdmin) {
+<a routerLink="/admin" routerLinkActive="active-link" class="text-label-caps uppercase transition-colors duration-200 no-underline" style="color: #ffb3b3 !important; background: rgba(255,82,95,0.15); padding: 2px 8px; border-radius: 6px;">Admin</a>
+}
 </div>
 
 <div class="flex items-center gap-4">
@@ -31,6 +34,9 @@ Comenzar
 <a routerLink="/formacion" routerLinkActive="active-link" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Formación</a>
 <a routerLink="/herramientas" routerLinkActive="active-link" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Herramientas</a>
 <a routerLink="/sobre-mi" routerLinkActive="active-link" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Sobre mí</a>
+@if (isAdmin) {
+<a routerLink="/admin" class="block py-2 px-3 rounded-lg text-label-caps uppercase no-underline" style="color: #ffb3b3 !important;" (click)="closeMenu()">Admin</a>
+}
 <div class="border-t border-outline-variant/20 pt-2 mt-1">
 <a routerLink="/login" class="block bg-primary text-on-primary text-label-caps px-4 py-2 rounded-full uppercase text-center font-bold hover:shadow-[0_0_20px_rgba(0,230,118,0.4)] transition-all duration-300 no-underline" (click)="closeMenu()">Comenzar</a>
 </div>
