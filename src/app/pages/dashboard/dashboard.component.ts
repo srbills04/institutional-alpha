@@ -1,30 +1,76 @@
-import { Component } from '@angular/core';
+import { Component, signal, inject, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { SupabaseService } from '../../services/supabase.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
-  protected readonly metrics = [
-    { label: 'Operaciones Hoy', value: '12', change: '+3', icon: 'trending_up' },
-    { label: 'Win Rate', value: '78%', change: '+5%', icon: 'check_circle' },
-    { label: 'Capital', value: '$24,850', change: '+2.4%', icon: 'account_balance' },
-    { label: 'R:R Promedio', value: '1:3.2', change: 'Estable', icon: 'balance' },
-  ];
+export class DashboardComponent implements OnInit {
+  private supabase = inject(SupabaseService);
+  private router = inject(Router);
 
-  protected readonly activeTrades = [
-    { pair: 'EUR/USD', direction: 'BUY', entry: '1.0842', sl: '1.0800', tp: '1.0950', pnl: '+32 pips' },
-    { pair: 'BTC/USD', direction: 'SELL', entry: '68,420', sl: '69,000', tp: '66,800', pnl: '+120 pts' },
-    { pair: 'XAU/USD', direction: 'BUY', entry: '2,348', sl: '2,340', tp: '2,365', pnl: '+8 pts' },
-  ];
+  protected readonly userEmail = signal('');
+  protected readonly userName = signal('');
+  protected readonly modules = signal<any[]>([]);
+  protected readonly progress = signal<any[]>([]);
+  protected readonly loading = signal(true);
+  protected readonly completedCount = signal(0);
+  protected readonly overallProgress = signal(0);
 
-  protected readonly modules = [
-    { name: 'Estructura Fractal', progress: 100 },
-    { name: 'Liquidez Avanzada', progress: 85 },
-    { name: 'Order Blocks', progress: 60 },
-    { name: 'Fair Value Gaps', progress: 40 },
-    { name: 'Kill Zones', progress: 20 },
-    { name: 'Gestión de Riesgo', progress: 0 },
-  ];
+  async ngOnInit() {
+    const user = this.supabase.currentUser();
+    if (!user) {
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.userEmail.set(user.email ?? '');
+    this.userName.set((user.user_metadata?.['full_name'] as string) ?? 'Estudiante');
+
+    await Promise.all([
+      this.loadModules(),
+      this.loadProgress(user.id)
+    ]);
+
+    this.loading.set(false);
+  }
+
+  private async loadModules() {
+    const { data } = await this.supabase.getModules();
+    if (data) this.modules.set(data);
+  }
+
+  private async loadProgress(userId: string) {
+    const { data } = await this.supabase.getStudentProgress(userId);
+    if (data) {
+      this.progress.set(data);
+      const completed = data.filter(p => p.completed).length;
+      this.completedCount.set(completed);
+      const total = this.modules().length || 1;
+      this.overallProgress.set(Math.round((completed / total) * 100));
+    } else {
+      // No progress yet, start at 0
+      this.overallProgress.set(0);
+    }
+  }
+
+  getModuleProgress(moduleId: string): number {
+    const p = this.progress().find(pr => pr.module_id === moduleId);
+    return p?.progress_percent ?? 0;
+  }
+
+  async markComplete(moduleId: string) {
+    const user = this.supabase.currentUser();
+    if (!user) return;
+
+    await this.supabase.updateProgress(user.id, moduleId, 100);
+    await this.loadProgress(user.id);
+  }
+
+  async logout() {
+    await this.supabase.signOut();
+    this.router.navigate(['/']);
+  }
 }
