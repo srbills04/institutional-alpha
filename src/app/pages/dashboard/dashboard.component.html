@@ -1,0 +1,82 @@
+<main class="pt-32 pb-24 px-gutter md:px-margin-desktop max-w-container-max mx-auto space-y-8">
+<div class="flex justify-between items-center">
+<div>
+<div class="text-label-caps text-primary uppercase tracking-widest mb-1">PANEL DE CONTROL</div>
+<h1 class="text-headline-md text-on-surface">Bienvenido, Operador</h1>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-label-caps text-on-surface-variant uppercase">Sesión activa</span>
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+</div>
+</div>
+
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+@for (metric of metrics; track metric.label) {
+<div class="glass-panel p-5 rounded-lg space-y-2">
+<div class="flex justify-between items-center">
+<span class="text-label-caps text-on-surface-variant uppercase">{{ metric.label }}</span>
+<span class="material-symbols-outlined text-primary text-sm">{{ metric.icon }}</span>
+</div>
+<div class="text-data-lg text-on-surface font-bold">{{ metric.value }}</div>
+<div class="text-label-caps text-primary">{{ metric.change }}</div>
+</div>
+}
+</section>
+
+<section>
+<h2 class="text-data-lg text-on-surface uppercase mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">show_chart</span>
+Operaciones Activas
+</h2>
+<div class="glass-panel rounded-lg overflow-hidden">
+<table class="w-full text-body-md">
+<thead class="bg-surface-container-low/50 text-label-caps text-on-surface-variant uppercase">
+<tr>
+<th class="text-left py-3 px-4">Par</th>
+<th class="text-left py-3 px-4">Dirección</th>
+<th class="text-left py-3 px-4 hidden sm:table-cell">Entrada</th>
+<th class="text-left py-3 px-4 hidden md:table-cell">SL</th>
+<th class="text-left py-3 px-4 hidden md:table-cell">TP</th>
+<th class="text-right py-3 px-4">PnL</th>
+</tr>
+</thead>
+<tbody>
+@for (trade of activeTrades; track trade.pair) {
+<tr class="border-t border-outline-variant/20 hover:bg-white/[0.02] transition-colors">
+<td class="py-3 px-4 font-mono text-on-surface">{{ trade.pair }}</td>
+<td class="py-3 px-4">
+<span [class.text-primary]="trade.direction === 'BUY'" [class.text-secondary-container]="trade.direction === 'SELL'" class="text-label-caps font-bold">
+{{ trade.direction }}
+</span>
+</td>
+<td class="py-3 px-4 font-mono text-on-surface-variant hidden sm:table-cell">{{ trade.entry }}</td>
+<td class="py-3 px-4 font-mono text-on-surface-variant hidden md:table-cell">{{ trade.sl }}</td>
+<td class="py-3 px-4 font-mono text-on-surface-variant hidden md:table-cell">{{ trade.tp }}</td>
+<td class="py-3 px-4 text-right text-primary font-mono">{{ trade.pnl }}</td>
+</tr>
+}
+</tbody>
+</table>
+</div>
+</section>
+
+<section>
+<h2 class="text-data-lg text-on-surface uppercase mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">school</span>
+Progreso de Formación
+</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+@for (mod of modules; track mod.name) {
+<div class="glass-panel p-4 rounded-lg space-y-2">
+<div class="flex justify-between items-center">
+<span class="text-label-caps text-on-surface-variant uppercase">{{ mod.name }}</span>
+<span class="text-label-caps text-primary">{{ mod.progress }}%</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-low rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full transition-all duration-500" [style.width.%]="mod.progress"></div>
+</div>
+</div>
+}
+</div>
+</section>
+</main>

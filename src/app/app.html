@@ -1,0 +1,60 @@
+<div class="fixed inset-0 -z-10 w-full h-full bg-grid"></div>
+
+<nav class="fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-container-max rounded-full border border-white/10 bg-surface/70 backdrop-blur-xl shadow-sm z-50 flex justify-between items-center px-gutter py-3">
+<div class="text-data-lg font-bold text-primary tracking-tighter uppercase cursor-pointer select-none">
+INSTITUTIONAL_ALPHA
+</div>
+
+<div class="hidden md:flex gap-6 items-center">
+<a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}" class="nav-link">Home</a>
+<a routerLink="/propuesta-educativa" routerLinkActive="active-link" class="nav-link">Propuesta Educativa</a>
+<a routerLink="/formacion" routerLinkActive="active-link" class="nav-link">Formación</a>
+<a routerLink="/herramientas" routerLinkActive="active-link" class="nav-link">Herramientas</a>
+<a routerLink="/sobre-mi" routerLinkActive="active-link" class="nav-link">Sobre mí</a>
+</div>
+
+<div class="flex items-center gap-4">
+<a routerLink="/login" class="hidden sm:inline-block bg-primary text-on-primary text-label-caps px-4 py-2 rounded-full uppercase hover:shadow-[0_0_20px_rgba(0,230,118,0.4)] transition-all duration-300 font-bold no-underline">
+Comenzar
+</a>
+<button class="md:hidden text-on-surface p-1 rounded-full hover:bg-white/10 transition-colors" (click)="toggleMenu()">
+<span class="material-symbols-outlined text-xl">{{ mobileMenuOpen ? 'close' : 'menu' }}</span>
+</button>
+</div>
+</nav>
+
+@if (mobileMenuOpen) {
+<div class="fixed inset-0 z-40 md:hidden" (click)="closeMenu()">
+<div class="absolute top-20 right-4 w-56 glass-panel rounded-xl p-4 shadow-2xl border border-white/10 backdrop-blur-2xl space-y-1" (click)="$event.stopPropagation()">
+<a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Home</a>
+<a routerLink="/propuesta-educativa" routerLinkActive="active-link" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Propuesta Educativa</a>
+<a routerLink="/formacion" routerLinkActive="active-link" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Formación</a>
+<a routerLink="/herramientas" routerLinkActive="active-link" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Herramientas</a>
+<a routerLink="/sobre-mi" routerLinkActive="active-link" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Sobre mí</a>
+<div class="border-t border-outline-variant/20 pt-2 mt-1">
+<a routerLink="/login" class="block bg-primary text-on-primary text-label-caps px-4 py-2 rounded-full uppercase text-center font-bold hover:shadow-[0_0_20px_rgba(0,230,118,0.4)] transition-all duration-300 no-underline" (click)="closeMenu()">Comenzar</a>
+</div>
+</div>
+</div>
+}
+
+<div class="page-wrapper">
+  <router-outlet />
+</div>
+
+<footer class="px-margin-desktop py-8 w-full max-w-container-max mx-auto border-t border-outline-variant/30 bg-surface-dim/50 backdrop-blur-sm mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div class="text-data-md font-bold text-primary uppercase tracking-wider">
+INSTITUTIONAL_ALPHA
+</div>
+<div class="flex flex-wrap gap-4">
+<a class="nav-link text-label-caps" routerLink="/sobre-mi">Sobre mí</a>
+<a class="nav-link text-label-caps" routerLink="/propuesta-educativa">Propuesta</a>
+<a class="nav-link text-label-caps" routerLink="/formacion">Formación</a>
+<a class="nav-link text-label-caps" routerLink="/herramientas">Herramientas</a>
+</div>
+<div class="text-body-md text-on-surface-variant/40 text-xs">
+&copy; 2025 INSTITUTIONAL ALPHA TRADING.
+</div>
+</div>
+</footer>
