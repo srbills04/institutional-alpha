@@ -42,11 +42,19 @@ export class LoginComponent {
       }
 
       if (data.user && !data.session) {
-        this.success.set('Cuenta creada. Revisa tu correo para confirmar.');
+        this.success.set('Cuenta creada. Revisa tu correo para confirmar. Una vez confirmado, inicia sesión.');
+        this.email.set('');
+        this.password.set('');
+        this.fullName.set('');
         return;
       }
 
-      this.router.navigate(['/dashboard']);
+      if (data.session) {
+        this.router.navigate(['/dashboard'], { replaceUrl: true });
+        return;
+      }
+
+      this.error.set('No se pudo crear la cuenta. Intenta de nuevo.');
     } else {
       const { data, error } = await this.supabase.signIn(this.email(), this.password());
       this.loading.set(false);
@@ -56,7 +64,12 @@ export class LoginComponent {
         return;
       }
 
-      this.router.navigate(['/dashboard']);
+      if (data.session) {
+        this.router.navigate(['/dashboard'], { replaceUrl: true });
+        return;
+      }
+
+      this.error.set('Credenciales inválidas.');
     }
   }
 }

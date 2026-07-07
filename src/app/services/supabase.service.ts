@@ -44,12 +44,20 @@ export class SupabaseService {
       auth: { persistSession: true, autoRefreshToken: true }
     });
 
-    this.supabase.auth.getSession().then(({ data }) => {
-      const user = data.session?.user ?? null;
-      this.currentUser.set(user);
-      if (user) this.loadRole(user.id);
-      else { this.role.set(null); this.roleLoaded.set(true); }
-    });
+    // Process auth hash from URL if present (e.g., after email confirmation)
+    if (typeof window !== 'undefined') {
+      this.supabase.auth.getSession().then(({ data }) => {
+        const user = data.session?.user ?? null;
+        this.currentUser.set(user);
+        if (user) this.loadRole(user.id);
+        else { this.role.set(null); this.roleLoaded.set(true); }
+        
+        // Clean URL hash after processing
+        if (window.location.hash.includes('access_token')) {
+          window.history.replaceState({}, document.title, window.location.pathname + window.location.search);
+        }
+      });
+    }
 
     this.supabase.auth.onAuthStateChange((_, session) => {
       const user = session?.user ?? null;
