@@ -1,10 +1,10 @@
 import { Component, signal, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { SupabaseService } from '../../services/supabase.service';
 
 @Component({
   selector: 'app-login',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })

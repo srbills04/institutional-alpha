@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { SupabaseService } from './services/supabase.service';
 
@@ -12,9 +12,10 @@ export class App {
   mobileMenuOpen = false;
   private supabase = inject(SupabaseService);
 
-  get user() { return this.supabase.currentUser(); }
-  get isAdmin() { return this.supabase.role() === 'admin'; }
-  get isLoggedIn() { return !!this.user(); }
+  protected readonly currentUser = this.supabase.currentUser;
+  protected readonly role = this.supabase.role;
+  protected readonly isLoggedIn = computed(() => !!this.supabase.currentUser());
+  protected readonly isAdmin = computed(() => this.supabase.role() === 'admin');
 
   toggleMenu() { this.mobileMenuOpen = !this.mobileMenuOpen; }
   closeMenu() { this.mobileMenuOpen = false; }
