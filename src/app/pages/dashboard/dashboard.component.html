@@ -45,7 +45,7 @@ Mis Módulos
 } @else {
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 @for (mod of modules(); track mod.id) {
-<div class="glass-panel p-5 rounded-lg space-y-3">
+<a [routerLink]="['/contenido', mod.id]" class="glass-panel p-5 rounded-lg space-y-3 no-underline block hover:bg-surface-container-high/30 transition-colors">
 <div class="flex justify-between items-center">
 <span class="text-label-caps text-on-surface-variant uppercase">MOD_{{ mod.order_index }}</span>
 <span class="material-symbols-outlined text-primary text-sm">{{ mod.icon || 'school' }}</span>
@@ -61,12 +61,12 @@ Mis Módulos
 <div class="h-full bg-primary rounded-full transition-all duration-500" [style.width.%]="getModuleProgress(mod.id)"></div>
 </div>
 @if (getModuleProgress(mod.id) < 100) {
-<button (click)="markComplete(mod.id)" class="w-full text-label-caps text-primary uppercase border border-primary/30 rounded-full py-2 hover:bg-primary/10 transition-colors mt-2">
+<button type="button" (click)="markComplete(mod.id); $event.stopPropagation(); $event.preventDefault()" class="w-full text-label-caps text-primary uppercase border border-primary/30 rounded-full py-2 hover:bg-primary/10 transition-colors mt-2">
 Marcar completado
 </button>
 }
 </div>
-</div>
+</a>
 }
 </div>
 }

@@ -14,58 +14,27 @@ Un plan de estudio progresivo que te lleva desde los fundamentos del price actio
 <section class="space-y-8">
 <div class="flex justify-between items-end border-b border-outline-variant pb-4">
 <h2 class="text-headline-md text-on-surface">Plan de Estudios</h2>
-<div class="text-data-md text-on-surface-variant">12 MÓDULOS · 24 SEMANAS</div>
+<div class="text-data-md text-on-surface-variant">{{ modules().length }} MÓDULOS</div>
 </div>
+
+@if (loading()) {
+<div class="flex items-center justify-center py-12">
+<span class="material-symbols-outlined text-primary animate-spin text-4xl">sync</span>
+</div>
+} @else {
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-<div class="glass-panel p-6 rounded-lg border-l-4 border-l-primary">
+@for (mod of modules(); track mod.id) {
+<a [routerLink]="['/contenido', mod.id]" class="glass-panel p-6 rounded-lg border-l-4 hover:bg-surface-container-high/30 transition-colors no-underline block" [class.border-l-primary]="$first" [class.border-l-secondary-container]="!$first">
 <div class="flex justify-between items-center mb-3">
-<span class="text-label-caps text-primary uppercase tracking-widest">MÓDULO 1 · FUNDAMENTOS</span>
-<span class="material-symbols-outlined text-primary">api</span>
+<span class="text-label-caps uppercase tracking-widest" [class.text-primary]="$first" [class.text-secondary-container]="!$first">MÓDULO {{ mod.order_index }}</span>
+<span class="material-symbols-outlined" [class.text-primary]="$first" [class.text-secondary-container]="!$first">{{ mod.icon || 'school' }}</span>
 </div>
-<h3 class="text-data-lg text-on-surface uppercase mb-2">Estructura Fractal del Mercado</h3>
-<p class="text-body-md text-on-surface-variant">Aprende a leer la estructura jerárquica de los mercados financieros. Identificación de tendencias, rangos y puntos de inflexión en múltiples temporalidades.</p>
+<h3 class="text-data-lg text-on-surface uppercase mb-2">{{ mod.title }}</h3>
+<p class="text-body-md text-on-surface-variant">{{ mod.description }}</p>
+</a>
+}
 </div>
-<div class="glass-panel p-6 rounded-lg border-l-4 border-l-secondary-container">
-<div class="flex justify-between items-center mb-3">
-<span class="text-label-caps text-secondary-container uppercase tracking-widest">MÓDULO 2 · LIQUIDEZ</span>
-<span class="material-symbols-outlined text-secondary-container">water_drop</span>
-</div>
-<h3 class="text-data-lg text-on-surface uppercase mb-2">Liquidez Avanzada</h3>
-<p class="text-body-md text-on-surface-variant">Identificación de pools de liquidez, stops de minoristas y zonas de absorción institucional. Comprende dónde y cuándo entran los grandes jugadores.</p>
-</div>
-<div class="glass-panel p-6 rounded-lg border-l-4 border-l-primary">
-<div class="flex justify-between items-center mb-3">
-<span class="text-label-caps text-primary uppercase tracking-widest">MÓDULO 3 · BLOQUES</span>
-<span class="material-symbols-outlined text-primary">view_in_ar</span>
-</div>
-<h3 class="text-data-lg text-on-surface uppercase mb-2">Order Blocks</h3>
-<p class="text-body-md text-on-surface-variant">Detección de bloques de órdenes institucionales. Aprende a identificar las huellas que dejan las grandes entidades en el gráfico de precios.</p>
-</div>
-<div class="glass-panel p-6 rounded-lg border-l-4 border-l-secondary-container">
-<div class="flex justify-between items-center mb-3">
-<span class="text-label-caps text-secondary-container uppercase tracking-widest">MÓDULO 4 · DESEQUILIBRIO</span>
-<span class="material-symbols-outlined text-secondary-container">compare_arrows</span>
-</div>
-<h3 class="text-data-lg text-on-surface uppercase mb-2">Fair Value Gaps</h3>
-<p class="text-body-md text-on-surface-variant">Identificación de desequilibrios de precio (imbalances) y cómo operar los rebalances del mercado hacia zonas de fair value.</p>
-</div>
-<div class="glass-panel p-6 rounded-lg border-l-4 border-l-primary">
-<div class="flex justify-between items-center mb-3">
-<span class="text-label-caps text-primary uppercase tracking-widest">MÓDULO 5 · VENTANAS</span>
-<span class="material-symbols-outlined text-primary">schedule</span>
-</div>
-<h3 class="text-data-lg text-on-surface uppercase mb-2">Kill Zones</h3>
-<p class="text-body-md text-on-surface-variant">Ventanas de alta probabilidad: London Kill Zone, New York Kill Zone, Asia Kill Zone. Sincroniza tus operaciones con los horarios de mayor volatilidad institucional.</p>
-</div>
-<div class="glass-panel p-6 rounded-lg border-l-4 border-l-secondary-container">
-<div class="flex justify-between items-center mb-3">
-<span class="text-label-caps text-secondary-container uppercase tracking-widest">MÓDULO 6 · RIESGO</span>
-<span class="material-symbols-outlined text-secondary-container">analytics</span>
-</div>
-<h3 class="text-data-lg text-on-surface uppercase mb-2">Gestión de Riesgo</h3>
-<p class="text-body-md text-on-surface-variant">Matemática de preservación de capital. Position sizing, stop loss estratégico, relación riesgo-beneficio y gestión de rachas.</p>
-</div>
-</div>
+}
 </section>
 
 <section class="glass-panel p-8 rounded-lg text-center space-y-4">
