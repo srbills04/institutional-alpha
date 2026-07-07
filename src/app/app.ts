@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { SupabaseService } from './services/supabase.service';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -13,15 +12,10 @@ export class App {
   mobileMenuOpen = false;
   private supabase = inject(SupabaseService);
 
-  get isAdmin() {
-    return this.supabase.role() === 'admin';
-  }
+  get user() { return this.supabase.currentUser(); }
+  get isAdmin() { return this.supabase.role() === 'admin'; }
+  get isLoggedIn() { return !!this.user(); }
 
-  toggleMenu() {
-    this.mobileMenuOpen = !this.mobileMenuOpen;
-  }
-
-  closeMenu() {
-    this.mobileMenuOpen = false;
-  }
+  toggleMenu() { this.mobileMenuOpen = !this.mobileMenuOpen; }
+  closeMenu() { this.mobileMenuOpen = false; }
 }

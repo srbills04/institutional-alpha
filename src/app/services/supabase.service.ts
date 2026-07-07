@@ -33,31 +33,40 @@ export interface Profile {
 export class SupabaseService {
   private supabase: SupabaseClient;
   readonly currentUser = signal<User | null>(null);
-  readonly role = signal<string>('student');
+  readonly role = signal<string | null>(null);
+  readonly roleLoaded = signal<boolean>(false);
 
   constructor() {
-    this.supabase = createClient(
-      'https://iznqhzdudvjdeprakvdc.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6bnFoemR1ZHZqZGVwcmFrdmRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzMTYwNDgsImV4cCI6MjA5ODg5MjA0OH0.iyJnBjZnIBJtsBiKgbWrtI9i5REQNw52OpIwqj895pI'
-    );
+    const supabaseUrl = (typeof window !== 'undefined' && (window as any).ENV?.SUPABASE_URL) || 'https://iznqhzdudvjdeprakvdc.supabase.co';
+    const supabaseKey = (typeof window !== 'undefined' && (window as any).ENV?.SUPABASE_KEY) || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6bnFoemR1ZHZqZGVwcmFrdmRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMzMTYwNDgsImV4cCI6MjA5ODg5MjA0OH0.iyJnBjZnIBJtsBiKgbWrtI9i5REQNw52OpIwqj895pI';
+
+    this.supabase = createClient(supabaseUrl, supabaseKey, {
+      auth: { persistSession: true, autoRefreshToken: true }
+    });
 
     this.supabase.auth.getSession().then(({ data }) => {
       const user = data.session?.user ?? null;
       this.currentUser.set(user);
       if (user) this.loadRole(user.id);
+      else { this.role.set(null); this.roleLoaded.set(true); }
     });
 
     this.supabase.auth.onAuthStateChange((_, session) => {
       const user = session?.user ?? null;
       this.currentUser.set(user);
       if (user) this.loadRole(user.id);
-      else this.role.set('student');
+      else { this.role.set(null); this.roleLoaded.set(true); }
     });
   }
 
   private async loadRole(userId: string) {
-    const { data } = await this.supabase.from('profiles').select('role').eq('id', userId).single();
-    this.role.set(data?.role ?? 'student');
+    try {
+      const { data } = await this.supabase.from('profiles').select('role').eq('id', userId).single();
+      this.role.set(data?.role ?? 'student');
+    } catch {
+      this.role.set('student');
+    }
+    this.roleLoaded.set(true);
   }
 
   get client() { return this.supabase; }
@@ -73,7 +82,8 @@ export class SupabaseService {
   async signOut() {
     await this.supabase.auth.signOut();
     this.currentUser.set(null);
-    this.role.set('student');
+    this.role.set(null);
+    this.roleLoaded.set(true);
   }
 
   async getProfile(userId: string) {
@@ -82,14 +92,12 @@ export class SupabaseService {
   }
 
   async getModules() {
-    const { data, error } = await this.supabase.from('modules').select('*').order('order_index', { ascending: true });
+    const { data, error } = await this.supabase.from('modules').select('*').order('order_index');
     return { data: data as Module[] | null, error };
   }
 
   async upsertModule(mod: Partial<Module>) {
-    if (mod.id) {
-      return this.supabase.from('modules').update(mod).eq('id', mod.id);
-    }
+    if (mod.id) return this.supabase.from('modules').update(mod).eq('id', mod.id);
     return this.supabase.from('modules').insert(mod);
   }
 
@@ -103,9 +111,7 @@ export class SupabaseService {
   }
 
   async upsertLesson(lesson: Partial<Lesson>) {
-    if (lesson.id) {
-      return this.supabase.from('lessons').update(lesson).eq('id', lesson.id);
-    }
+    if (lesson.id) return this.supabase.from('lessons').update(lesson).eq('id', lesson.id);
     return this.supabase.from('lessons').insert(lesson);
   }
 
