@@ -8,7 +8,6 @@ THINKERS
 <div class="hidden md:flex gap-6 items-center">
 <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}" class="nav-link">Home</a>
 <a routerLink="/propuesta-educativa" routerLinkActive="active-link" class="nav-link">Propuesta Educativa</a>
-<a routerLink="/formacion" routerLinkActive="active-link" class="nav-link">Formación</a>
 <a routerLink="/herramientas" routerLinkActive="active-link" class="nav-link">Herramientas</a>
 <a routerLink="/sobre-mi" routerLinkActive="active-link" class="nav-link">Sobre mí</a>
 @if (isLoggedIn()) {
@@ -38,7 +37,6 @@ THINKERS
 <div class="absolute top-20 right-4 w-56 glass-panel rounded-xl p-4 shadow-2xl border border-white/10 space-y-1" (click)="$event.stopPropagation()">
 <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Home</a>
 <a routerLink="/propuesta-educativa" routerLinkActive="active-link" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Propuesta Educativa</a>
-<a routerLink="/formacion" routerLinkActive="active-link" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Formación</a>
 <a routerLink="/herramientas" routerLinkActive="active-link" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Herramientas</a>
 <a routerLink="/sobre-mi" routerLinkActive="active-link" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Sobre mí</a>
 @if (isLoggedIn()) {
@@ -70,7 +68,6 @@ THINKERS
 <div class="flex flex-wrap gap-4">
 <a class="nav-link text-label-caps" routerLink="/sobre-mi">Sobre mí</a>
 <a class="nav-link text-label-caps" routerLink="/propuesta-educativa">Propuesta</a>
-<a class="nav-link text-label-caps" routerLink="/formacion">Formación</a>
 <a class="nav-link text-label-caps" routerLink="/herramientas">Herramientas</a>
 </div>
 <div class="text-body-md text-on-surface-variant/40 text-xs">&copy; 2025 Thinkers</div>

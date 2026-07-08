@@ -63,6 +63,32 @@ No vendemos señales ni robots mágicos. Ofrecemos una metodología probada que 
 </div>
 </section>
 
+<section class="space-y-8">
+<div class="flex justify-between items-end border-b border-outline-variant pb-4">
+<h2 class="text-headline-md text-on-surface">Plan de Estudios</h2>
+<div class="text-data-md text-on-surface-variant">{{ modules().length }} MÓDULOS</div>
+</div>
+
+@if (loading()) {
+<div class="flex items-center justify-center py-12">
+<span class="material-symbols-outlined text-primary animate-spin text-4xl">sync</span>
+</div>
+} @else {
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+@for (mod of modules(); track mod.id) {
+<a [routerLink]="['/contenido', mod.id]" class="glass-panel p-6 rounded-lg border-l-4 hover:bg-surface-container-high/30 transition-colors no-underline block" [class.border-l-primary]="$first" [class.border-l-secondary-container]="!$first">
+<div class="flex justify-between items-center mb-3">
+<span class="text-label-caps uppercase tracking-widest" [class.text-primary]="$first" [class.text-secondary-container]="!$first">MÓDULO {{ mod.order_index }}</span>
+<span class="material-symbols-outlined" [class.text-primary]="$first" [class.text-secondary-container]="!$first">{{ mod.icon || 'school' }}</span>
+</div>
+<h3 class="text-data-lg text-on-surface uppercase mb-2">{{ mod.title }}</h3>
+<p class="text-body-md text-on-surface-variant">{{ mod.description }}</p>
+</a>
+}
+</div>
+}
+</section>
+
 <section class="glass-panel p-8 rounded-lg text-center space-y-4 bg-surface-container-low/50">
 <h2 class="text-headline-md text-on-surface">¿Cumples con el perfil?</h2>
 <p class="text-body-lg text-on-surface-variant max-w-2xl mx-auto">Esta formación no es para todos. Está diseñada para operadores comprometidos que entienden que el trading es un negocio, no un juego de azar.</p>
@@ -72,5 +98,13 @@ No vendemos señales ni robots mágicos. Ofrecemos una metodología probada que 
 <div class="bg-surface-container/80 backdrop-blur-sm px-4 py-2 rounded border border-outline-variant/30 text-label-caps text-on-surface-variant uppercase">Dedicación</div>
 <div class="bg-surface-container/80 backdrop-blur-sm px-4 py-2 rounded border border-outline-variant/30 text-label-caps text-on-surface-variant uppercase">Humildad</div>
 </div>
+</section>
+
+<section class="glass-panel p-8 rounded-lg text-center space-y-4">
+<h2 class="text-headline-md text-on-surface">¿Listo para empezar?</h2>
+<p class="text-body-lg text-on-surface-variant max-w-2xl mx-auto">El 90% abandona antes de los 90 días. Los que perseveran, dominan.</p>
+<a routerLink="/login" class="inline-block bg-primary-container text-on-primary-fixed text-label-caps px-8 py-4 rounded uppercase hover:scale-[1.02] transition-transform shadow-[0_0_15px_rgba(0,230,118,0.3)] no-underline">
+Inscribirme Ahora
+</a>
 </section>
 </main>
