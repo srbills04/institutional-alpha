@@ -44,7 +44,18 @@ Mis Módulos
 </div>
 } @else {
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-@for (mod of modules(); track mod.id) {
+@for (mod of modules(); track mod.id; let idx = $index) {
+@if (isModuleLocked(idx)) {
+<div class="glass-panel p-5 rounded-lg space-y-3 opacity-50 cursor-not-allowed">
+<div class="flex justify-between items-center">
+<span class="text-label-caps text-on-surface-variant uppercase">MOD_{{ mod.order_index }}</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">lock</span>
+</div>
+<h3 class="text-data-md text-on-surface-variant uppercase">{{ mod.title }}</h3>
+<p class="text-body-md text-on-surface-variant">{{ mod.description }}</p>
+<div class="text-label-caps text-on-surface-variant/50">Completa el módulo anterior para desbloquear</div>
+</div>
+} @else {
 <a [routerLink]="['/contenido', mod.id]" class="glass-panel p-5 rounded-lg space-y-3 no-underline block hover:bg-surface-container-high/30 transition-colors">
 <div class="flex justify-between items-center">
 <span class="text-label-caps text-on-surface-variant uppercase">MOD_{{ mod.order_index }}</span>
@@ -60,13 +71,9 @@ Mis Módulos
 <div class="w-full h-1.5 bg-surface-container-low rounded-full overflow-hidden">
 <div class="h-full bg-primary rounded-full transition-all duration-500" [style.width.%]="getModuleProgress(mod.id)"></div>
 </div>
-@if (getModuleProgress(mod.id) < 100) {
-<button type="button" (click)="markComplete(mod.id); $event.stopPropagation(); $event.preventDefault()" class="w-full text-label-caps text-primary uppercase border border-primary/30 rounded-full py-2 hover:bg-primary/10 transition-colors mt-2">
-Marcar completado
-</button>
-}
 </div>
 </a>
+}
 }
 </div>
 }

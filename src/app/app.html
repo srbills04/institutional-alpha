@@ -13,6 +13,7 @@ THINKERS
 <a routerLink="/sobre-mi" routerLinkActive="active-link" class="nav-link">Sobre mí</a>
 @if (isLoggedIn()) {
 <a routerLink="/dashboard" routerLinkActive="active-link" class="nav-link">Mi Panel</a>
+<a routerLink="/perfil" routerLinkActive="active-link" class="nav-link">Perfil</a>
 }
 @if (isAdmin()) {
 <a routerLink="/admin" routerLinkActive="active-link" class="nav-link" style="color: #ffb3b3 !important; background: rgba(255,82,95,0.12); padding: 2px 8px; border-radius: 6px;">Admin</a>
@@ -42,6 +43,7 @@ THINKERS
 <a routerLink="/sobre-mi" routerLinkActive="active-link" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Sobre mí</a>
 @if (isLoggedIn()) {
 <a routerLink="/dashboard" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Mi Panel</a>
+<a routerLink="/perfil" class="nav-link block py-2 px-3 rounded-lg hover:bg-white/5" (click)="closeMenu()">Perfil</a>
 }
 @if (isAdmin()) {
 <a routerLink="/admin" class="block py-2 px-3 rounded-lg text-label-caps uppercase no-underline" style="color: #ffb3b3 !important;" (click)="closeMenu()">Admin</a>

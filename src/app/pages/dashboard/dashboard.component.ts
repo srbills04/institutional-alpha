@@ -1,6 +1,6 @@
 import { Component, signal, inject, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { SupabaseService } from '../../services/supabase.service';
+import { SupabaseService, Module } from '../../services/supabase.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,9 +14,9 @@ export class DashboardComponent implements OnInit {
 
   protected readonly userEmail = signal('');
   protected readonly userName = signal('');
-  protected readonly modules = signal<any[]>([]);
-  protected readonly progress = signal<any[]>([]);
+  protected readonly modules = signal<Module[]>([]);
   protected readonly loading = signal(true);
+  protected readonly moduleProgress = signal<Record<string, number>>({});
   protected readonly completedCount = signal(0);
   protected readonly overallProgress = signal(0);
 
@@ -30,44 +30,41 @@ export class DashboardComponent implements OnInit {
     this.userEmail.set(user.email ?? '');
     this.userName.set((user.user_metadata?.['full_name'] as string) ?? 'Estudiante');
 
-    await Promise.all([
-      this.loadModules(),
-      this.loadProgress(user.id)
-    ]);
+    const { data: modules } = await this.supabase.getModules();
+    if (modules) this.modules.set(modules);
+
+    if (modules && modules.length > 0) {
+      const progressMap: Record<string, number> = {};
+      let totalLessons = 0;
+      let completedLessons = 0;
+
+      await Promise.all(modules.map(async mod => {
+        const { data: lessonProgress } = await this.supabase.getLessonProgress(user.id, mod.id);
+        const { data: lessons } = await this.supabase.getLessons(mod.id);
+        const total = lessons?.length ?? 1;
+        const completed = lessonProgress?.filter(lp => lp.completed).length ?? 0;
+        progressMap[mod.id] = Math.round((completed / total) * 100);
+        totalLessons += total;
+        completedLessons += completed;
+      }));
+
+      this.moduleProgress.set(progressMap);
+      const completedModules = Object.values(progressMap).filter(p => p >= 100).length;
+      this.completedCount.set(completedModules);
+      this.overallProgress.set(totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0);
+    }
 
     this.loading.set(false);
   }
 
-  private async loadModules() {
-    const { data } = await this.supabase.getModules();
-    if (data) this.modules.set(data);
+  getModuleProgress(modId: string): number {
+    return this.moduleProgress()[modId] ?? 0;
   }
 
-  private async loadProgress(userId: string) {
-    const { data } = await this.supabase.getStudentProgress(userId);
-    if (data) {
-      this.progress.set(data);
-      const completed = data.filter(p => p.completed).length;
-      this.completedCount.set(completed);
-      const total = this.modules().length || 1;
-      this.overallProgress.set(Math.round((completed / total) * 100));
-    } else {
-      // No progress yet, start at 0
-      this.overallProgress.set(0);
-    }
-  }
-
-  getModuleProgress(moduleId: string): number {
-    const p = this.progress().find(pr => pr.module_id === moduleId);
-    return p?.progress_percent ?? 0;
-  }
-
-  async markComplete(moduleId: string) {
-    const user = this.supabase.currentUser();
-    if (!user) return;
-
-    await this.supabase.updateProgress(user.id, moduleId, 100);
-    await this.loadProgress(user.id);
+  isModuleLocked(index: number): boolean {
+    if (index === 0) return false;
+    const prevMod = this.modules()[index - 1];
+    return this.getModuleProgress(prevMod.id) < 100;
   }
 
   async logout() {

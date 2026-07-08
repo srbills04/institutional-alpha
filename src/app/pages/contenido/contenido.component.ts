@@ -20,6 +20,8 @@ export class ContenidoComponent implements OnInit {
   protected readonly loading = signal(true);
   protected readonly progress = signal(0);
   protected readonly videoUrl = signal<SafeResourceUrl | null>(null);
+  protected readonly lessonCompleted = signal<Record<string, boolean>>({});
+  protected readonly saving = signal(false);
 
   async ngOnInit() {
     const moduleId = this.route.snapshot.paramMap.get('id');
@@ -33,10 +35,14 @@ export class ContenidoComponent implements OnInit {
     this.lessons.set(lessons ?? []);
 
     const user = this.supabase.currentUser();
-    if (user) {
-      const { data } = await this.supabase.getStudentProgress(user.id);
-      const prog = data?.find(p => p.module_id === moduleId);
-      this.progress.set(prog?.progress_percent ?? 0);
+    if (user && lessons && lessons.length > 0) {
+      const { data } = await this.supabase.getLessonProgress(user.id, moduleId);
+      if (data) {
+        const completed: Record<string, boolean> = {};
+        data.forEach(p => { completed[p.lesson_id] = p.completed; });
+        this.lessonCompleted.set(completed);
+      }
+      this.recalcProgress();
     }
 
     if (lessons && lessons.length > 0) {
@@ -75,12 +81,30 @@ export class ContenidoComponent implements OnInit {
     return null;
   }
 
-  async markProgress(percent: number) {
+  async toggleLessonComplete(lesson: Lesson) {
     const user = this.supabase.currentUser();
     const mod = this.module();
     if (!user || !mod) return;
 
-    await this.supabase.updateProgress(user.id, mod.id, percent);
+    this.saving.set(true);
+    const isCompleted = !this.lessonCompleted()[lesson.id];
+    await this.supabase.saveLessonProgress(user.id, lesson.id, mod.id, 0, isCompleted);
+
+    this.lessonCompleted.update(c => ({ ...c, [lesson.id]: isCompleted }));
+    this.recalcProgress();
+    this.saving.set(false);
+  }
+
+  private async recalcProgress() {
+    const user = this.supabase.currentUser();
+    const mod = this.module();
+    const lessons = this.lessons();
+    if (!user || !mod || lessons.length === 0) return;
+
+    const completedCount = lessons.filter(l => this.lessonCompleted()[l.id]).length;
+    const percent = Math.round((completedCount / lessons.length) * 100);
     this.progress.set(percent);
+
+    await this.supabase.updateProgress(user.id, mod.id, percent);
   }
 }

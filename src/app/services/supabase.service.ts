@@ -99,6 +99,12 @@ export class SupabaseService {
     return { data: data as Profile | null };
   }
 
+  async updateProfile(fullName: string) {
+    const user = this.currentUser();
+    if (!user) return { error: { message: 'No autenticado' } };
+    return this.supabase.from('profiles').upsert({ id: user.id, full_name: fullName, email: user.email }, { onConflict: 'id' });
+  }
+
   async getModules() {
     const { data, error } = await this.supabase.from('modules').select('*').order('order_index');
     return { data: data as Module[] | null, error };
@@ -130,6 +136,23 @@ export class SupabaseService {
   async getStudentProgress(userId: string) {
     const { data } = await this.supabase.from('student_progress').select('*, modules(*)').eq('user_id', userId);
     return { data };
+  }
+
+  async getLessonProgress(userId: string, moduleId: string) {
+    const { data } = await this.supabase.from('lesson_progress').select('*').eq('user_id', userId).eq('module_id', moduleId);
+    return { data };
+  }
+
+  async saveLessonProgress(userId: string, lessonId: string, moduleId: string, videoTimestamp: number, completed: boolean) {
+    return this.supabase.from('lesson_progress').upsert({
+      user_id: userId,
+      lesson_id: lessonId,
+      module_id: moduleId,
+      video_timestamp: videoTimestamp,
+      completed,
+      completed_at: completed ? new Date().toISOString() : null,
+      updated_at: new Date().toISOString()
+    }, { onConflict: 'user_id,lesson_id' });
   }
 
   async updateProgress(userId: string, moduleId: string, percent: number) {

@@ -30,14 +30,19 @@ Volver al Dashboard
 <h2 class="text-data-md text-on-surface uppercase mb-3">Lecciones</h2>
 @for (lesson of lessons(); track lesson.id) {
 <div (click)="selectLesson(lesson)" class="glass-panel p-3 rounded-lg cursor-pointer hover:bg-surface-container-high/50 transition-colors" [class.border-primary]="selectedLesson()?.id === lesson.id">
+<div class="flex items-center justify-between">
 <div class="flex items-center gap-2">
-<span class="material-symbols-outlined" [class.text-primary]="selectedLesson()?.id === lesson.id" class="text-on-surface-variant text-sm">{{ lesson.video_url ? 'play_circle' : 'description' }}</span>
+<span class="material-symbols-outlined" [class.text-primary]="selectedLesson()?.id === lesson.id || lessonCompleted()[lesson.id]" class="text-on-surface-variant text-sm">{{ lessonCompleted()[lesson.id] ? 'check_circle' : (lesson.video_url ? 'play_circle' : 'description') }}</span>
 <div>
 <div class="text-label-caps text-on-surface uppercase">{{ lesson.title || 'Lección sin título' }}</div>
 @if (lesson.duration_minutes) {
 <div class="text-label-caps text-on-surface-variant/50">{{ lesson.duration_minutes }} min</div>
 }
 </div>
+</div>
+@if (lessonCompleted()[lesson.id]) {
+<span class="material-symbols-outlined text-primary text-sm">verified</span>
+}
 </div>
 </div>
 }
@@ -55,21 +60,14 @@ Volver al Dashboard
 }
 
 <div class="glass-panel p-6 rounded-lg space-y-3">
+<div class="flex justify-between items-start">
 <h2 class="text-data-lg text-on-surface uppercase">{{ selectedLesson()!.title }}</h2>
+<button (click)="toggleLessonComplete(selectedLesson()!)" [class.opacity-50]="saving()" class="flex items-center gap-2 text-label-caps px-4 py-2 rounded-full uppercase transition-all" [class.bg-primary]="!lessonCompleted()[selectedLesson()!.id]" [class.text-on-primary]="!lessonCompleted()[selectedLesson()!.id]" [class.bg-surface-container-low]="lessonCompleted()[selectedLesson()!.id]" [class.text-primary]="lessonCompleted()[selectedLesson()!.id]" [class.border]="lessonCompleted()[selectedLesson()!.id]" [class.border-primary]="lessonCompleted()[selectedLesson()!.id]">
+<span class="material-symbols-outlined text-sm">{{ lessonCompleted()[selectedLesson()!.id] ? 'check_circle' : 'radio_button_unchecked' }}</span>
+{{ lessonCompleted()[selectedLesson()!.id] ? 'Completada' : 'Marcar completada' }}
+</button>
+</div>
 <p class="text-body-md text-on-surface-variant">{{ selectedLesson()!.description }}</p>
-</div>
-
-<div class="glass-panel p-6 rounded-lg space-y-4">
-<div class="flex justify-between items-center">
-<h3 class="text-data-md text-on-surface uppercase">Marcar Progreso</h3>
-<span class="text-data-lg text-primary font-bold">{{ progress() }}%</span>
-</div>
-<div class="flex gap-2">
-<button (click)="markProgress(0)" class="flex-1 bg-surface-container-low text-on-surface-variant text-label-caps py-2 rounded-full uppercase hover:bg-white/5 transition-colors">0%</button>
-<button (click)="markProgress(25)" class="flex-1 bg-surface-container-low text-on-surface-variant text-label-caps py-2 rounded-full uppercase hover:bg-white/5 transition-colors">25%</button>
-<button (click)="markProgress(50)" class="flex-1 bg-surface-container-low text-on-surface-variant text-label-caps py-2 rounded-full uppercase hover:bg-white/5 transition-colors">50%</button>
-<button (click)="markProgress(100)" class="flex-1 bg-primary text-on-primary text-label-caps py-2 rounded-full uppercase hover:shadow-[0_0_10px_rgba(0,230,118,0.3)]">100%</button>
-</div>
 </div>
 </div>
 } @else {
