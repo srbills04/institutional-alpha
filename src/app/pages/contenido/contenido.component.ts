@@ -1,7 +1,7 @@
 import { Component, signal, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { SupabaseService, Lesson, Module } from '../../services/supabase.service';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-contenido',
@@ -20,6 +20,7 @@ export class ContenidoComponent implements OnInit {
   protected readonly loading = signal(true);
   protected readonly progress = signal(0);
   protected readonly videoUrl = signal<SafeResourceUrl | null>(null);
+  protected readonly lessonContent = signal<SafeHtml | null>(null);
   protected readonly lessonCompleted = signal<Record<string, boolean>>({});
   protected readonly saving = signal(false);
 
@@ -55,6 +56,7 @@ export class ContenidoComponent implements OnInit {
   selectLesson(lesson: Lesson) {
     this.selectedLesson.set(lesson);
     this.videoUrl.set(null);
+    this.lessonContent.set(null);
 
     if (lesson.video_url) {
       const id = this.extractYoutubeId(lesson.video_url);
@@ -64,6 +66,10 @@ export class ContenidoComponent implements OnInit {
         );
         this.videoUrl.set(url);
       }
+    }
+
+    if (lesson.content_html) {
+      this.lessonContent.set(this.sanitizer.bypassSecurityTrustHtml(lesson.content_html));
     }
   }
 

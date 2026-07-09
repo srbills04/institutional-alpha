@@ -118,8 +118,8 @@ Salir
 <input [(ngModel)]="editingLesson()!.title" class="w-full bg-surface-container-low border border-outline-variant/30 rounded-lg px-3 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary">
 </div>
 <div>
-<label class="text-label-caps text-on-surface-variant uppercase block mb-1">Descripción</label>
-<input [(ngModel)]="editingLesson()!.description" class="w-full bg-surface-container-low border border-outline-variant/30 rounded-lg px-3 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary">
+<label class="text-label-caps text-on-surface-variant uppercase block mb-1">Descripción corta</label>
+<textarea [(ngModel)]="editingLesson()!.description" rows="2" class="w-full bg-surface-container-low border border-outline-variant/30 rounded-lg px-3 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary resize-y"></textarea>
 </div>
 <div>
 <label class="text-label-caps text-on-surface-variant uppercase block mb-1">URL del Video (ID de YouTube o URL completa)</label>
@@ -132,6 +132,10 @@ Salir
 <div>
 <label class="text-label-caps text-on-surface-variant uppercase block mb-1">Orden</label>
 <input [(ngModel)]="editingLesson()!.order_index" type="number" class="w-full bg-surface-container-low border border-outline-variant/30 rounded-lg px-3 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary">
+</div>
+<div>
+<label class="text-label-caps text-on-surface-variant uppercase block mb-1">Contenido / Notas de la lección (HTML)</label>
+<textarea [(ngModel)]="editingLesson()!.content_html" rows="6" placeholder="Agrega notas, objetivos de aprendizaje, resumen, etc. Soporta HTML básico." class="w-full bg-surface-container-low border border-outline-variant/30 rounded-lg px-3 py-2 text-body-md text-on-surface focus:outline-none focus:border-primary resize-y font-mono text-sm"></textarea>
 </div>
 <div class="flex gap-2">
 <button (click)="saveLesson()" class="bg-primary text-on-primary text-label-caps px-4 py-2 rounded-full uppercase text-xs">Guardar</button>

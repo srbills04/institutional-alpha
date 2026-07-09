@@ -20,6 +20,7 @@ export interface Lesson {
   video_url: string;
   duration_minutes: number;
   order_index: number;
+  content_html: string;
 }
 
 export interface Profile {
