@@ -1,0 +1,87 @@
+# THINKERS - Plataforma de Formación Algorítmica
+
+> THINKERS es una plataforma educativa especializada en formación algorítmica institucional para traders. Ofrece un plan de estudios progresivo de 12 módulos que cubre desde fundamentos de price action institucional hasta ejecución algorítmica de alto nivel.
+
+## Información Principal
+
+- **Sitio web**: https://institutional-alpha.vercel.app
+- **Idioma**: Español
+- **Tipo**: Plataforma educativa / LMS (Learning Management System)
+- **Tecnología**: Angular 22, Supabase, Tailwind CSS, Vercel
+
+## Estructura del Sitio
+
+### Páginas Públicas
+- [Home](https://institutional-alpha.vercel.app/) - Página principal con propuesta de valor
+- [Propuesta Educativa](https://institutional-alpha.vercel.app/propuesta-educativa) - Metodología de enseñanza, plan de estudios con módulos dinámicos, y perfil del estudiante ideal
+- [Herramientas](https://institutional-alpha.vercel.app/herramientas) - Herramientas profesionales: gráfico avanzado, dashboard en vivo, calculadora de riesgo, diario de trading, scanner de mercado, backtesting
+- [Sobre mí](https://institutional-alpha.vercel.app/sobre-mi) - Información del instructor
+
+### Autenticación
+- [Login/Registro](https://institutional-alpha.vercel.app/login) - Acceso para estudiantes, registro de nuevas cuentas con confirmación de email
+
+### Área de Estudiantes (requiere login)
+- [Dashboard](https://institutional-alpha.vercel.app/dashboard) - Panel del estudiante con progreso general, módulos con % de avance, y desbloqueo progresivo
+- [Perfil](https://institutional-alpha.vercel.app/perfil) - Ver y editar datos personales
+- [Contenido del Módulo](https://institutional-alpha.vercel.app/contenido/:id) - Videos de YouTube embebidos, descripción de lecciones, notas enriquecidas en HTML, marcado de lecciones completadas
+
+### Área Admin (solo administradores)
+- [Panel Admin](https://institutional-alpha.vercel.app/admin) - CRUD de módulos y lecciones, gestión de contenido con soporte para descripciones enriquecidas en HTML
+
+## Funcionalidades Clave
+
+### Sistema de Progreso
+- Progreso rastreado por lección individual (no solo por módulo)
+- Cálculo automático del % de avance del módulo basado en lecciones completadas
+- Desbloqueo progresivo: un módulo se desbloquea solo cuando el anterior está al 100%
+- Botón "Marcar completada" por lección
+
+### Contenido Educativo
+- Videos de YouTube embebidos (modo "No listado")
+- Descripción corta por lección
+- Notas enriquecidas con HTML (objetivos, resumen, puntos clave)
+- Duración estimada por lección
+
+### Seguridad
+- Row Level Security (RLS) en todas las tablas de Supabase
+- Guards de autenticación y autorización por rol
+- Funciones SECURITY DEFINER protegidas
+- Tokens JWT con expiración y refresh automático
+
+## Plan de Estudios
+
+12 módulos progresivos que cubren:
+1. Estructura Fractal del Mercado
+2. Liquidez Avanzada
+3. Order Blocks
+4. Fair Value Gaps
+5. Kill Zones
+6. Gestión de Riesgo
+7. Y más módulos especializados
+
+## Metodología
+
+- **Aprendizaje Progresivo**: De lo simple a lo complejo
+- **Práctica Intensiva**: 70% del curso es práctico
+- **Análisis de Casos**: Operaciones reales del instructor y alumnos
+- **Evaluación Continua**: Exámenes semanales y challenges
+
+## Perfil del Estudiante
+
+Diseñado para operadores comprometidos con:
+- Disciplina
+- Paciencia
+- Dedicación
+- Humildad
+
+## Stack Tecnológico
+
+- **Frontend**: Angular 22, TypeScript 6, Tailwind CSS
+- **Backend/Auth**: Supabase (PostgreSQL + Auth + Storage)
+- **Video**: YouTube (embebido, modo no listado)
+- **Hosting**: Vercel
+- **Base de datos**: PostgreSQL con RLS
+
+## Contacto
+
+Para consultas sobre la plataforma, contactar al administrador del sitio.

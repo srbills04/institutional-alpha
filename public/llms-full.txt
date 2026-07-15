@@ -1,0 +1,378 @@
+# THINKERS - Documentación Completa para IAs
+
+Este documento proporciona información detallada sobre la plataforma THINKERS para agentes de IA, asistentes y crawlers.
+
+## Descripción General
+
+THINKERS es una plataforma educativa de formación algorítmica institucional diseñada para transformar operadores minoristas en traders algorítmicos rentables. La plataforma utiliza un enfoque progresivo de 12 módulos que cubre desde fundamentos hasta ejecución avanzada.
+
+**URL**: https://institutional-alpha.vercel.app
+**Idioma principal**: Español
+**Audiencia**: Traders y operadores financieros comprometidos
+
+## Arquitectura del Sistema
+
+### Frontend
+- **Framework**: Angular 22 (última versión estable)
+- **Lenguaje**: TypeScript 6.0
+- **Estilos**: Tailwind CSS con diseño glassmorphism oscuro
+- **Componentes**: Standalone components con signals para reactividad
+- **Routing**: Angular Router con guards de autenticación y autorización
+
+### Backend
+- **Base de datos**: Supabase (PostgreSQL)
+- **Autenticación**: Supabase Auth con JWT
+- **Storage**: YouTube (videos en modo no listado)
+- **Seguridad**: Row Level Security (RLS) en todas las tablas
+
+### Infraestructura
+- **Hosting**: Vercel con deploy automático desde GitHub
+- **Repositorio**: github.com/srbills04/institutional-alpha
+- **CI/CD**: GitHub → Vercel (auto-deploy en cada push)
+
+## Estructura de Rutas
+
+### Rutas Públicas (sin autenticación)
+
+#### `/` - Home
+Página principal con propuesta de valor, beneficios clave y call-to-action.
+
+#### `/propuesta-educativa` - Propuesta Educativa
+Contenido completo sobre la metodología:
+- Tres pilares: Formación Integral, Comunidad Exclusiva, Mentoría Continua
+- Metodología de enseñanza en 4 pasos
+- Plan de estudios con módulos dinámicos (cargados desde Supabase)
+- Perfil del estudiante ideal
+- Call-to-action para inscripción
+
+**Datos dinámicos**: Lista de módulos con título, descripción, ícono y orden.
+
+#### `/herramientas` - Herramientas Profesionales
+Catálogo de 6 herramientas:
+1. Gráfico Avanzado - Price action institucional
+2. Dashboard en Vivo - Monitor de mercados en tiempo real
+3. Calculadora de Riesgo - Position sizing automatizado
+4. Diario de Trading - Registro con estadísticas
+5. Scanner de Mercado - Detección multiactivo
+6. Módulo de Backtesting - Simulador de estrategias
+
+#### `/sobre-mi` - Sobre el Instructor
+Información del creador de la plataforma.
+
+#### `/login` - Autenticación
+Formulario dual de login/registro:
+- Login con email y contraseña
+- Registro con nombre completo, email y contraseña
+- Confirmación de email requerida
+- Redirección automática a dashboard tras login exitoso
+
+### Rutas Protegidas (requieren autenticación)
+
+#### `/dashboard` - Panel del Estudiante
+**Guard**: `authGuard` (requiere sesión activa)
+
+Vista principal del estudiante:
+- Saludo personalizado con nombre del usuario
+- Progreso general (lecciones completadas / total)
+- Lista de módulos con:
+  - Título y descripción
+  - Barra de progreso (%)
+  - Estado de bloqueo (si el módulo anterior no está completo)
+  - Enlace directo al contenido (si está desbloqueado)
+- Botón de logout
+
+**Lógica de desbloqueo**:
+- Módulo 1: Siempre desbloqueado
+- Módulo N: Desbloqueado solo si Módulo N-1 está al 100%
+- Módulos bloqueados muestran candado y mensaje "Completa el módulo anterior para desbloquear"
+
+#### `/perfil` - Perfil de Usuario
+**Guard**: `authGuard`
+
+Permite:
+- Ver email (no editable)
+- Editar nombre completo
+- Ver rol (Admin/Estudiante)
+- Guardar cambios en Supabase
+
+#### `/contenido/:id` - Contenido del Módulo
+**Guard**: `authGuard`
+
+Vista de aprendizaje con layout de 2 columnas:
+
+**Columna izquierda (1/4)**:
+- Lista de lecciones del módulo
+- Cada lección muestra:
+  - Título
+  - Duración (minutos)
+  - Ícono de estado (play_circle, check_circle si está completada)
+  - Badge "verified" si está completada
+
+**Columna derecha (3/4)**:
+- Header del módulo con título y % de progreso
+- Video de YouTube embebido (iframe)
+- Título de la lección seleccionada
+- Botón "Marcar completada" / "Completada"
+- Descripción corta de la lección
+- Sección "Notas de la lección" con contenido HTML enriquecido
+
+**Sistema de progreso**:
+- Cada lección tiene un toggle de completado
+- Al marcar/desmarcar, se guarda en tabla `lesson_progress`
+- El % del módulo se recalcula automáticamente: (lecciones completadas / total) * 100
+- El progreso se sincroniza con tabla `student_progress`
+
+### Rutas Administrativas
+
+#### `/admin` - Panel de Administración
+**Guard**: `adminGuard` (requiere rol = 'admin')
+
+CRUD completo de contenido:
+
+**Gestión de Módulos**:
+- Lista de todos los módulos
+- Crear nuevo módulo
+- Editar módulo (título, descripción, número, ícono, orden)
+- Eliminar módulo
+
+**Gestión de Lecciones** (por módulo):
+- Lista de lecciones del módulo seleccionado
+- Crear nueva lección
+- Editar lección con campos:
+  - Título
+  - Descripción corta (textarea)
+  - URL de video YouTube (acepta ID o URL completa)
+  - Duración en minutos
+  - Orden
+  - Contenido HTML enriquecido (textarea con soporte HTML)
+- Eliminar lección
+
+**Formatos de URL de video soportados**:
+- `https://youtube.com/watch?v=ID`
+- `https://youtu.be/ID`
+- `https://youtube.com/embed/ID`
+- ID puro (11 caracteres)
+
+## Base de Datos
+
+### Tablas Principales
+
+#### `profiles`
+```sql
+- id (uuid, PK, FK a auth.users)
+- email (text)
+- full_name (text)
+- role (text: 'admin' | 'instructor' | 'student')
+- avatar_url (text, nullable)
+- created_at (timestamptz)
+- updated_at (timestamptz)
+```
+
+#### `courses`
+```sql
+- id (uuid, PK)
+- title (text)
+- description (text)
+- slug (text, unique)
+- total_modules (int)
+- created_at (timestamptz)
+```
+
+#### `modules`
+```sql
+- id (uuid, PK)
+- course_id (uuid, FK)
+- module_number (int)
+- title (text)
+- description (text)
+- icon (text)
+- content_html (text)
+- order_index (int)
+- created_at (timestamptz)
+```
+
+#### `lessons`
+```sql
+- id (uuid, PK)
+- module_id (uuid, FK)
+- title (text)
+- description (text)
+- video_url (text)
+- duration_minutes (int)
+- order_index (int)
+- content_html (text)
+- created_at (timestamptz)
+- updated_at (timestamptz)
+```
+
+#### `student_progress`
+```sql
+- id (uuid, PK)
+- user_id (uuid, FK)
+- module_id (uuid, FK)
+- progress_percent (int, 0-100)
+- completed (boolean)
+- completed_at (timestamptz, nullable)
+- created_at (timestamptz)
+- updated_at (timestamptz)
+UNIQUE(user_id, module_id)
+```
+
+#### `lesson_progress`
+```sql
+- id (uuid, PK)
+- user_id (uuid, FK)
+- lesson_id (uuid, FK)
+- module_id (uuid, FK)
+- video_timestamp (int, segundos)
+- completed (boolean)
+- completed_at (timestamptz, nullable)
+- created_at (timestamptz)
+- updated_at (timestamptz)
+UNIQUE(user_id, lesson_id)
+```
+
+#### `materials`
+```sql
+- id (uuid, PK)
+- lesson_id (uuid, FK)
+- title (text)
+- file_url (text)
+- file_path (text)
+- file_type (text)
+- file_size (int)
+- created_at (timestamptz)
+```
+
+### Políticas de Seguridad (RLS)
+
+#### profiles
+- SELECT: Solo el propio usuario (`auth.uid() = id`)
+- UPDATE: Solo el propio usuario
+- INSERT: Solo el propio usuario
+
+#### modules, lessons, materials
+- SELECT: Usuarios autenticados
+- INSERT/UPDATE/DELETE: Solo admins
+
+#### student_progress, lesson_progress
+- SELECT/UPDATE/DELETE: Solo el propio usuario
+- INSERT: Solo el propio usuario
+
+## Flujo de Usuario
+
+### Registro y Primer Acceso
+1. Usuario visita `/` o `/propuesta-educativa`
+2. Hace clic en "Comenzar" o "Inscribirme Ahora"
+3. Redirigido a `/login`
+4. Cambia a modo "Registro"
+5. Ingresa nombre, email y contraseña
+6. Recibe email de confirmación
+7. Hace clic en enlace de confirmación
+8. Redirigido a `/dashboard`
+9. Ve Módulo 1 desbloqueado, resto bloqueados
+
+### Flujo de Aprendizaje
+1. Usuario en `/dashboard`
+2. Hace clic en módulo desbloqueado
+3. Redirigido a `/contenido/:moduleId`
+4. Ve primera lección automáticamente
+5. Ve video de YouTube
+6. Lee descripción y notas
+7. Marca lección como completada
+8. Progreso del módulo se actualiza
+9. Repite con siguientes lecciones
+10. Al completar todas las lecciones, módulo siguiente se desbloquea
+
+### Flujo Administrativo
+1. Admin hace login
+2. Ve enlace "Admin" en navbar
+3. Accede a `/admin`
+4. Crea/edita módulos
+5. Para cada módulo, crea lecciones
+6. Pega URL de YouTube y contenido HTML
+7. Los cambios se reflejan instantáneamente para estudiantes
+
+## SEO y Meta Tags
+
+Cada ruta tiene título dinámico:
+- `/` → "THINKERS — Formación Algorítmica"
+- `/propuesta-educativa` → "Propuesta Educativa — THINKERS"
+- `/herramientas` → "Herramientas — THINKERS"
+- `/sobre-mi` → "Sobre mí — THINKERS"
+- `/login` → "Acceder — THINKERS"
+- `/dashboard` → "Mi Panel — THINKERS"
+- `/perfil` → "Mi Perfil — THINKERS"
+- `/admin` → "Admin — THINKERS"
+- `/contenido/:id` → "Contenido — THINKERS"
+
+## Características de UX/UI
+
+### Diseño
+- Tema oscuro con glassmorphism
+- Colores primarios: verde (#75ff9e) y rojo (#ff525f)
+- Tipografía: Inter (cuerpo) y JetBrains Mono (datos/labels)
+- Iconos: Material Symbols Outlined
+- Responsive: mobile-first con breakpoints md, lg, xl
+
+### Navegación
+- Navbar fijo con blur backdrop
+- Menú hamburguesa en mobile
+- Links dinámicos según estado de autenticación
+- Badge visual para enlace Admin
+
+### Feedback
+- Loading spinners en operaciones asíncronas
+- Mensajes de éxito/error con íconos
+- Transiciones suaves en hover/focus
+- Barras de progreso animadas
+
+## Integraciones
+
+### Supabase
+- Autenticación con email/password
+- Base de datos PostgreSQL
+- Row Level Security
+- Email templates personalizados
+
+### YouTube
+- Videos embebidos via iframe
+- Modo "No listado" para privacidad
+- Extracción automática de ID de video
+- Parámetros: modestbranding=1, rel=0
+
+### Vercel
+- Deploy automático desde GitHub
+- Rewrites para SPA routing
+- CDN global
+
+## Consideraciones para IAs
+
+### Contenido Dinámico
+- Los módulos y lecciones se cargan desde Supabase
+- El contenido puede cambiar frecuentemente
+- Las URLs de contenido son `/contenido/:moduleId` donde `:moduleId` es un UUID
+
+### Autenticación
+- La mayoría del contenido educativo requiere login
+- Las páginas públicas (home, propuesta, herramientas, sobre-mi) son accesibles sin login
+- Los agentes de IA solo pueden acceder a páginas públicas
+
+### Estructura de Datos
+- Los módulos tienen `order_index` para ordenamiento
+- Las lecciones tienen `order_index` dentro de cada módulo
+- El progreso se calcula en tiempo real basado en lecciones completadas
+
+### Seguridad
+- No intentar acceder a rutas protegidas sin autenticación
+- Respetar las políticas RLS de Supabase
+- Los endpoints de API requieren JWT válido
+
+## Contacto y Soporte
+
+Para consultas técnicas o problemas con la plataforma, contactar al administrador del sitio a través de los canales oficiales.
+
+---
+
+**Última actualización**: Enero 2026
+**Versión**: 1.0

@@ -1,0 +1,64 @@
+# robots.txt para THINKERS
+# https://institutional-alpha.vercel.app
+
+User-agent: *
+Allow: /
+Allow: /propuesta-educativa
+Allow: /herramientas
+Allow: /sobre-mi
+Allow: /login
+
+# Bloquear rutas protegidas
+Disallow: /dashboard
+Disallow: /perfil
+Disallow: /admin
+Disallow: /contenido/
+
+# Permitir acceso a archivos de IA
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /sitemap.xml
+
+# Bloquear assets internos
+Disallow: /*.js$
+Disallow: /*.css$
+Disallow: /api/
+
+# Crawlers específicos de IA
+User-agent: GPTBot
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: ChatGPT-User
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: Google-Extended
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: CCBot
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: anthropic-ai
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: Claude-Web
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: PerplexityBot
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+# Sitemap
+Sitemap: https://institutional-alpha.vercel.app/sitemap.xml
