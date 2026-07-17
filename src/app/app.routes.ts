@@ -9,6 +9,9 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { ContenidoComponent } from './pages/contenido/contenido.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
 import { VentasComponent } from './pages/ventas/ventas.component';
+import { LeadMagnetComponent } from './pages/lead-magnet/lead-magnet.component';
+import { CheckoutComponent } from './pages/checkout/checkout.component';
+import { GraciasComponent } from './pages/gracias/gracias.component';
 import { adminGuard } from './guards/admin.guard';
 import { authGuard } from './guards/auth.guard';
 
@@ -18,6 +21,9 @@ export const routes: Routes = [
   { path: 'herramientas', component: HerramientasComponent, title: 'Herramientas — THINKERS' },
   { path: 'sobre-mi', component: SobreMiComponent, title: 'Sobre mí — THINKERS' },
   { path: 'ventas', component: VentasComponent, title: 'Inscripción — THINKERS' },
+  { path: 'lead-magnet', component: LeadMagnetComponent, title: 'Guía Gratuita — THINKERS' },
+  { path: 'checkout', component: CheckoutComponent, title: 'Checkout — THINKERS' },
+  { path: 'gracias', component: GraciasComponent, title: 'Gracias — THINKERS' },
   { path: 'login', component: LoginComponent, title: 'Acceder — THINKERS' },
   { path: 'dashboard', component: DashboardComponent, title: 'Mi Panel — THINKERS' },
   { path: 'perfil', component: PerfilComponent, title: 'Mi Perfil — THINKERS' },
