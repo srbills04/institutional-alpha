@@ -60,47 +60,51 @@ FINALIZAR INSCRIPCIÓN
 <div class="glass-panel p-6 rounded-lg space-y-4">
 <div class="flex items-center gap-3 pb-4 border-b border-outline-variant/30">
 <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-<span class="material-symbols-outlined text-primary">account_balance</span>
+<span class="material-symbols-outlined text-primary">currency_bitcoin</span>
 </div>
 <div>
-<h2 class="text-data-md text-on-surface uppercase">Pago por Transferencia Bancaria</h2>
-<p class="text-label-caps text-on-surface-variant">Transferí el monto y enviá el comprobante</p>
+<h2 class="text-data-md text-on-surface uppercase">Pago con USDT (BSC)</h2>
+<p class="text-label-caps text-on-surface-variant">Enviá 497 USDT por la red Binance Smart Chain</p>
 </div>
 </div>
 
 <div class="space-y-4">
-<div class="bg-surface-container-low p-4 rounded-lg border border-outline-variant/20 space-y-3">
-<h3 class="text-label-caps text-primary uppercase">Datos Bancarios</h3>
+<div class="bg-surface-container-low p-4 rounded-lg border border-outline-variant/20 space-y-4">
+<h3 class="text-label-caps text-primary uppercase text-center">Escaneá el QR o copiá la dirección</h3>
+
+<div class="flex justify-center">
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=0xa1b0ca5b69e5566c1fdd0bf8c3d4e8d475cbe2a7&bgcolor=121414&color=75ff9e" alt="QR Code USDT BSC" class="w-48 h-48 rounded-lg border border-outline-variant/20">
+</div>
+
 <div class="space-y-2">
-<div class="flex justify-between">
-<span class="text-label-caps text-on-surface-variant">Banco</span>
-<span class="text-body-md text-on-surface">[Nombre del Banco]</span>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/10">
+<span class="text-label-caps text-on-surface-variant">Red</span>
+<span class="text-body-md text-on-surface font-bold">BSC (BEP-20)</span>
 </div>
-<div class="flex justify-between">
-<span class="text-label-caps text-on-surface-variant">Titular</span>
-<span class="text-body-md text-on-surface">[Tu Nombre Completo]</span>
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/10">
+<span class="text-label-caps text-on-surface-variant">Token</span>
+<span class="text-body-md text-on-surface font-bold">USDT</span>
 </div>
-<div class="flex justify-between">
-<span class="text-label-caps text-on-surface-variant">CBU / IBAN</span>
-<span class="text-body-md text-on-surface font-mono">[XXXX-XXXX-XXXX]</span>
-</div>
-<div class="flex justify-between">
-<span class="text-label-caps text-on-surface-variant">Alias</span>
-<span class="text-body-md text-on-surface font-mono">[tu.alias.mp]</span>
-</div>
-<div class="flex justify-between">
+<div class="flex justify-between items-center py-2 border-b border-outline-variant/10">
 <span class="text-label-caps text-on-surface-variant">Monto</span>
-<span class="text-data-md text-primary font-bold">$497 USD</span>
+<span class="text-data-md text-primary font-bold">497 USDT</span>
+</div>
+</div>
+
+<div class="space-y-2">
+<label class="text-label-caps text-on-surface-variant uppercase">Dirección de Wallet</label>
+<div class="flex items-center gap-2 bg-surface-container p-3 rounded-lg border border-outline-variant/20">
+<code class="text-body-md text-on-surface font-mono text-xs flex-1 break-all">0xa1b0ca5b69e5566c1fdd0bf8c3d4e8d475cbe2a7</code>
 </div>
 </div>
 </div>
 
-<div class="bg-primary/5 border border-primary/20 p-4 rounded-lg space-y-2">
+<div class="bg-error-container/20 border border-error-container/30 p-4 rounded-lg space-y-2">
 <div class="flex items-start gap-2">
-<span class="material-symbols-outlined text-primary text-sm mt-0.5">info</span>
+<span class="material-symbols-outlined text-secondary-container text-sm mt-0.5">warning</span>
 <div>
-<h3 class="text-label-caps text-on-surface uppercase">Importante</h3>
-<p class="text-body-md text-on-surface-variant">En el concepto de la transferencia incluí tu nombre completo y la palabra <strong class="text-on-surface">THINKERS</strong>.</p>
+<h3 class="text-label-caps text-secondary-container uppercase">Importante</h3>
+<p class="text-body-md text-on-error-container">Enviá <strong>SOLO USDT por la red BSC (BEP-20)</strong>. Enviar por otra red (ERC-20, TRC-20, etc.) puede resultar en pérdida de fondos.</p>
 </div>
 </div>
 </div>
@@ -114,16 +118,16 @@ FINALIZAR INSCRIPCIÓN
 </div>
 <div>
 <h2 class="text-data-md text-on-surface uppercase">Enviar Comprobante</h2>
-<p class="text-label-caps text-on-surface-variant">Una vez hecha la transferencia</p>
+<p class="text-label-caps text-on-surface-variant">Una vez hecha la transferencia en USDT</p>
 </div>
 </div>
 
 <div class="space-y-4">
 <p class="text-body-md text-on-surface-variant">
-Enviá el comprobante de transferencia junto con tu nombre completo y email de registro a:
+Enviá una captura de pantalla de la transacción confirmada junto con tu nombre completo y email de registro a:
 </p>
 <div class="bg-surface-container-low p-4 rounded-lg border border-outline-variant/20 text-center">
-<a href="mailto:tecnologia@ancteam.com?subject=Comprobante THINKERS&body=Nombre completo: %0AEmail de registro: %0AComprobante adjunto" class="text-primary text-data-md font-bold no-underline hover:underline">
+<a href="mailto:tecnologia@ancteam.com?subject=Comprobante THINKERS USDT&body=Nombre completo: %0AEmail de registro: %0ATxHash: %0AComprobante adjunto" class="text-primary text-data-md font-bold no-underline hover:underline">
 tecnologia&#64;ancteam.com
 </a>
 </div>
@@ -139,7 +143,11 @@ tecnologia&#64;ancteam.com
 </div>
 <div class="flex items-center gap-2">
 <span class="material-symbols-outlined text-primary text-sm">check_circle</span>
-<span class="text-body-md text-on-surface">Comprobante de transferencia (foto o PDF)</span>
+<span class="text-body-md text-on-surface">TxHash (hash de la transacción)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span class="text-body-md text-on-surface">Captura de pantalla de la transacción</span>
 </div>
 </div>
 </div>
