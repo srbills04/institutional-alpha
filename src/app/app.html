@@ -21,7 +21,7 @@ THINKERS
 
 <div class="flex items-center gap-4">
 @if (!isLoggedIn()) {
-<a routerLink="/login" class="hidden sm:inline-block bg-primary text-on-primary text-label-caps px-4 py-2 rounded-full uppercase hover:shadow-[0_0_20px_rgba(0,230,118,0.4)] transition-all duration-300 font-bold no-underline">Comenzar</a>
+<a routerLink="/ventas" class="hidden sm:inline-block bg-primary text-on-primary text-label-caps px-4 py-2 rounded-full uppercase hover:shadow-[0_0_20px_rgba(0,230,118,0.4)] transition-all duration-300 font-bold no-underline">Inscribirse</a>
 }
 @if (isLoggedIn()) {
 <a routerLink="/dashboard" class="hidden sm:inline-block text-on-surface text-label-caps px-3 py-2 rounded-full uppercase hover:bg-white/5 transition-colors no-underline">Panel</a>
@@ -48,7 +48,7 @@ THINKERS
 }
 <div class="border-t border-outline-variant/20 pt-2 mt-1">
 @if (!isLoggedIn()) {
-<a routerLink="/login" class="block bg-primary text-on-primary text-label-caps px-4 py-2 rounded-full uppercase text-center font-bold hover:shadow-[0_0_20px_rgba(0,230,118,0.4)] transition-all duration-300 no-underline" (click)="closeMenu()">Comenzar</a>
+<a routerLink="/ventas" class="block bg-primary text-on-primary text-label-caps px-4 py-2 rounded-full uppercase text-center font-bold hover:shadow-[0_0_20px_rgba(0,230,118,0.4)] transition-all duration-300 no-underline" (click)="closeMenu()">Inscribirse</a>
 }
 @if (isLoggedIn()) {
 <a routerLink="/dashboard" class="block text-on-surface text-label-caps px-4 py-2 rounded-full uppercase text-center font-bold border border-outline-variant/30 no-underline" (click)="closeMenu()">Mi Panel</a>
@@ -69,6 +69,7 @@ THINKERS
 <a class="nav-link text-label-caps" routerLink="/sobre-mi">Sobre mí</a>
 <a class="nav-link text-label-caps" routerLink="/propuesta-educativa">Propuesta</a>
 <a class="nav-link text-label-caps" routerLink="/herramientas">Herramientas</a>
+<a class="nav-link text-label-caps" routerLink="/ventas">Inscribirse</a>
 </div>
 <div class="text-body-md text-on-surface-variant/40 text-xs">&copy; 2025 Thinkers</div>
 </div>

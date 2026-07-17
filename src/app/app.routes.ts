@@ -8,6 +8,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { ContenidoComponent } from './pages/contenido/contenido.component';
 import { PerfilComponent } from './pages/perfil/perfil.component';
+import { VentasComponent } from './pages/ventas/ventas.component';
 import { adminGuard } from './guards/admin.guard';
 import { authGuard } from './guards/auth.guard';
 
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'propuesta-educativa', component: PropuestaComponent, title: 'Propuesta Educativa — THINKERS' },
   { path: 'herramientas', component: HerramientasComponent, title: 'Herramientas — THINKERS' },
   { path: 'sobre-mi', component: SobreMiComponent, title: 'Sobre mí — THINKERS' },
+  { path: 'ventas', component: VentasComponent, title: 'Inscripción — THINKERS' },
   { path: 'login', component: LoginComponent, title: 'Acceder — THINKERS' },
   { path: 'dashboard', component: DashboardComponent, title: 'Mi Panel — THINKERS' },
   { path: 'perfil', component: PerfilComponent, title: 'Mi Perfil — THINKERS' },
