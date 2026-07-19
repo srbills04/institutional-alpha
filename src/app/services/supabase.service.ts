@@ -164,4 +164,8 @@ export class SupabaseService {
       completed_at: completed ? new Date().toISOString() : null
     }, { onConflict: 'user_id,module_id' });
   }
+
+  async submitCommunityLead(lead: { full_name: string; phone: string; email: string; exness_account: string }) {
+    return this.supabase.from('community_leads').insert(lead);
+  }
 }
